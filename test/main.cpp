@@ -1,6 +1,7 @@
 #include <iostream>
 #include <gtest/gtest.h>
 #include "../src/vector.h"
+#include "../src/queue.h"
 
 using namespace std;
 
@@ -186,4 +187,64 @@ TEST(Vector, GetFront) {
         vec.AddBack(arr[i]);
     }
     ASSERT_EQ(vec.GetFront(), arr[0]);
+}
+
+TEST(Queue, PushBack) {
+    int arr[] = { 41, 467, -334, 500, 0, 169, 724, 478, -267, 11 };
+    int size = 10;
+    TQueue<int> que;
+
+    for (int i = 0; i < size; i++) {
+        que.PushBack(arr[i]);
+    }
+
+    ASSERT_EQ(que.Size(), size);
+}
+
+TEST(Queue, Pop) {
+    int arr[] = { 41, 467, -334, 500, 0, 169, 724, 478, -267, 11 };
+    int size = 10;
+    TQueue<int> que;
+
+    for (int i = 0; i < size; i++) {
+        que.PushBack(arr[i]);
+    }
+    que.PopBack();
+    que.PopBack();
+    que.PopBack();
+
+    ASSERT_EQ(que.Size(), size - 3);
+}
+
+TEST(Queue, PopFront) {
+    int arr[] = { 41, 467, -334, 500, 0, 169, 724, 478, -267, 11 };
+    int size = 10;
+    TQueue<int> que;
+
+    for (int i = 0; i < size; i++) {
+        que.PushBack(arr[i]);
+    }
+    int a = que.Front();
+    que.PopFront();
+    int b = que.Front();
+    que.PopFront();
+
+    ASSERT_EQ(a, arr[0]);
+    ASSERT_EQ(b, arr[1]);
+}
+
+TEST(Queue, IsEmpty) {
+    int arr[] = { 41, 467, -334, 500, 0, 169, 724, 478, -267, 11 };
+    int size = 10;
+    TQueue<int> que;
+    TQueue<int> queEmpty;
+
+    for (int i = 0; i < size; i++) {
+        que.PushBack(arr[i]);
+    }
+    que.PopBack();
+    que.PopBack();
+
+    ASSERT_FALSE(que.IsEmpty());
+    ASSERT_TRUE(queEmpty.IsEmpty());
 }
