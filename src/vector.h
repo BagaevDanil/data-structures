@@ -27,22 +27,23 @@ public:
     TVector();
     ~TVector();
 
-    void Add(int position, T value); //
-    void AddFront(T value); //
-    void AddBack(T value); //
-    void Delete(int position); //
-    void DeleteFront(); //
-    void DeleteBack(); // 
-    void Print() const; //
+    void Add(int position, T value); 
+    void AddFront(T value); 
+    void AddBack(T value); 
+    void Delete(int position); 
+    void DeleteFront();
+    void DeleteBack();  
+    void Print() const; 
     std::string ToString() const;
-    const int& GetSizeVector() const; //
-    const int& GetSizeMemory() const; //
+    const int& GetSizeVector() const; 
+    const int& GetSizeMemory() const; 
+    bool IsEmpty() const;
 
-    void SortTimsort(); //
-    void BubbleSort(); //
-    void RandomMix(); //
-    bool IsSort() const; //
-    void ClearVector(); //
+    void SortTimsort(); 
+    void BubbleSort();
+    void RandomMix(); 
+    bool IsSort() const;
+    void ClearVector(); 
     const T& GetBack() const;
     const T& GetFront() const;
     const T& operator[] (const int index);
@@ -189,10 +190,8 @@ void TVector<T>::sortInsertionPart(T* arr, int indexFirst, int indexLast)
     {
         T current = arr[i];
         int j = i - 1;
-        while ((j >= indexFirst) && (current > arr[j])) { // ToDo sawap()
-            T num = arr[j];
-            arr[j] = arr[j + 1];
-            arr[j + 1] = num;
+        while ((j >= indexFirst) && (current > arr[j])) {
+            swap(arr[j], arr[j + 1]);
             --j;
         }
     }
@@ -240,7 +239,7 @@ void TVector<T>::merge(T* arr, int firstIndexStart, int firstLenght, int secondI
 template<class T>
 void TVector<T>::SortTimsort() {
     int minrun = GetMinrun(_SizeVector);
-    TVector<Run> queueRun; // ToDo
+    TQueue<Run> queueRun;
 
     int indexStart = 0;
     while (indexStart < _SizeVector - 1) {
@@ -275,22 +274,22 @@ void TVector<T>::SortTimsort() {
         Run newRun;
         newRun.indexStart = indexStart;
         newRun.length = indexLast - indexStart;
-        queueRun.AddBack(newRun);
+        queueRun.PushBack(newRun);
 
         indexStart = indexLast;
 
-        while (queueRun.GetSizeVector() >= 3) {
-            Run x = queueRun.GetBack();
-            queueRun.DeleteBack();
-            Run y = queueRun.GetBack();
-            queueRun.DeleteBack();
-            Run z = queueRun.GetBack();
-            queueRun.DeleteBack();
+        while (queueRun.Size() >= 3) {
+            Run x = queueRun.Back();
+            queueRun.PopBack();
+            Run y = queueRun.Back();
+            queueRun.PopBack();
+            Run z = queueRun.Back();
+            queueRun.PopBack();
 
             if (z.length >= x.length + y.length && y.length >= x.length) {
-                queueRun.AddBack(z);
-                queueRun.AddBack(y);
-                queueRun.AddBack(x);
+                queueRun.PushBack(z);
+                queueRun.PushBack(y);
+                queueRun.PushBack(x);
                 break;
             }
             else if (z.length >= x.length + y.length) {
@@ -299,9 +298,9 @@ void TVector<T>::SortTimsort() {
                     swap(x.length, y.length);
                 }
                 merge(_Arr, y.indexStart, y.length, x.indexStart, x.length);
-                queueRun.AddBack(z);
+                queueRun.PushBack(z);
                 y.length = y.length + x.length;
-                queueRun.AddBack(y);
+                queueRun.PushBack(y);
             }
             else {
                 if (y.indexStart < z.indexStart) {
@@ -310,29 +309,29 @@ void TVector<T>::SortTimsort() {
                 }
                 merge(_Arr, z.indexStart, z.length, y.indexStart, y.length);
                 z.length = z.length + y.length;
-                queueRun.AddBack(z);
-                queueRun.AddBack(x);
+                queueRun.PushBack(z);
+                queueRun.PushBack(x);
             }
         }
     }
 
-    while (queueRun.GetSizeVector() > 1) {
-        Run x = queueRun.GetFront();
-        queueRun.DeleteFront();
-        Run y = queueRun.GetFront();
-        queueRun.DeleteFront();
+    while (queueRun.Size() > 1) {
+        Run x = queueRun.Front();
+        queueRun.PopFront();
+        Run y = queueRun.Front();
+        queueRun.PopFront();
         if (x.indexStart > y.indexStart) {
             swap(x.indexStart, y.indexStart);
             swap(x.length, y.length);
         }
         if (y.indexStart != x.indexStart + x.length) {
-            queueRun.AddBack(y);
-            queueRun.AddBack(x);
+            queueRun.PushBack(y);
+            queueRun.PushBack(x);
             continue;
         }
         merge(_Arr, x.indexStart, x.length, y.indexStart, y.length);
         x.length = x.length + y.length;
-        queueRun.AddBack(x);
+        queueRun.PushBack(x);
     }
 }
 
@@ -404,4 +403,10 @@ std::string TVector<T>::ToString() const {
     }
     ans += "]";
     return ans;
+}
+
+template<class T>
+bool TVector<T>::IsEmpty() const
+{
+    return _SizeVector <= 0;
 }

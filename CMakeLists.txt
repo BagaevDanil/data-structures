@@ -24,11 +24,8 @@ add_executable(
 	src/edge.cpp
 	src/kruskal.cpp
 	src/vector.h
-	src/vector.cpp
 	src/queue.h
-	src/queue.cpp
 	src/treeAVL.h
-	src/treeAVL.cpp
 	src/vertex.h
 	src/vertex.cpp
 )
@@ -37,6 +34,11 @@ add_executable(
 add_executable(
 	Test 
 	test/main.cpp
+	# src/edge.h
+	src/vector.h
+	src/queue.h
+	# src/treeAVL.h
+	# src/vertex.h
 )
 target_link_libraries(
   Test
