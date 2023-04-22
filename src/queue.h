@@ -1,135 +1,67 @@
 #pragma once
 #include <iostream>
+#include "vector.h"
 
 using namespace std;
 
 template <class T>
-class Queue
+class TQueue : private TVector<T>
 {
-private:
-    T* m_arr;
-    int m_sizeVector;
-    int m_sizeMemory;
-
 public:
-    Queue();
-    ~Queue();
-    void Add(int Position, T Value);
-    void AddFront(T Value);
-    void AddBack(T Value);
-    void Delete(int Position);
-    void DeleteFront();
-    void DeleteBack();
-    int GetSizeVector();
-    T GetBack();
-    T GetFront();
+	void PushBack(T value);
+	void PushFront(T value);
+	void PopBack();
+	void PopFront();
+	bool IsEmpty() const;
+	const int& Size() const;
+	const T& Front() const;
+	const T& Back() const;
 };
 
-//-----------------------------------------------------------------------------------------------------
-
-template<class T>
-inline T Queue<T>::GetBack()
+template <class T>
+void TQueue<T>::PushBack(T value)
 {
-    return m_arr[m_sizeVector - 1];
-}
-
-template<class T>
-inline T Queue<T>::GetFront()
-{
-    return m_arr[0];
+	TVector<T>::AddBack(value);
 }
 
 template <class T>
-inline Queue<T>::Queue()
+void TQueue<T>::PushFront(T value)
 {
-    m_arr = new T[1];
-    m_sizeVector = 0;
-    m_sizeMemory = 1;
+	TVector<T>::AddFront(value);
 }
 
-template<class T>
-inline Queue<T>::~Queue()
+template <class T>
+void TQueue<T>::PopBack()
 {
-    delete[] m_arr;
+	TVector<T>::DeleteBack();
 }
 
-template<class T>
-inline void Queue<T>::Add(int Position, T Value)
+template <class T>
+void TQueue<T>::PopFront()
 {
-    if (Position < 0 || Position > m_sizeVector)
-    {
-        cout << "\nAAA";
-        exit(666);
-    }
-
-    if (m_sizeMemory == m_sizeVector)
-    {
-        m_sizeMemory *= 2;
-        T* newArr = new T[m_sizeMemory];
-
-        for (int i = 0; i < m_sizeVector; i++)
-            newArr[i] = m_arr[i];
-        delete[] m_arr;
-        m_arr = newArr;
-    }
-
-    m_sizeVector++;
-    for (int i = m_sizeVector - 1; i > Position; i--)
-        m_arr[i] = m_arr[i - 1];
-    m_arr[Position] = Value;
+	TVector<T>::DeleteFront();
 }
 
-template<class T>
-inline void Queue<T>::AddFront(T Value)
+template <class T>
+bool TQueue<T>::IsEmpty() const
 {
-    this->Add(0, Value);
+	return TVector<T>::IsEmpty();
 }
 
-template<class T>
-inline void Queue<T>::AddBack(T Value)
+template <class T>
+const int& TQueue<T>::Size() const
 {
-    this->Add(m_sizeVector, Value);
+	return TVector<T>::GetSizeVector();
 }
 
-template<class T>
-inline void Queue<T>::Delete(int Position)
+template <class T>
+const T& TQueue<T>::Back() const
 {
-    if (Position < 0 || Position >= m_sizeVector)
-    {
-        cout << "\nAAA";
-        exit(666);
-    }
-
-    if (m_sizeMemory == m_sizeVector * 4)
-    {
-        m_sizeMemory /= 2;
-        T* newArr = new T[m_sizeMemory];
-
-        for (int i = 0; i < m_sizeVector; i++)
-            newArr[i] = m_arr[i];
-        delete[] m_arr;
-        m_arr = newArr;
-    }
-
-    m_sizeVector--;
-    for (int i = Position; i < m_sizeVector; i++)
-        m_arr[i] = m_arr[i + 1];
+	return TVector<T>::GetBack();
 }
 
-template<class T>
-inline void Queue<T>::DeleteFront()
+template <class T>
+const T& TQueue<T>::Front() const
 {
-    this->Delete(0);
-}
-
-template<class T>
-inline void Queue<T>::DeleteBack()
-{
-    this->Delete(m_sizeVector - 1);
-}
-
-template<class T>
-inline int Queue<T>::GetSizeVector()
-{
-    return m_sizeVector;
+	return TVector<T>::GetFront();
 }
