@@ -1,102 +1,102 @@
 #pragma once
 #include <iostream>
-#include <vector>
-#include "Queue.h"
 
 using namespace std;
 
 template <class T>
-class MyVector
+class TVector
 {
-private:
-    T* m_arr;
-    int m_sizeVector;
-    int m_sizeMemory;
 
-    class Run
+private:
+    T* _Arr;
+    int _SizeVector;
+    int _SizeMemory;
+    int _MagFactor = 2;
+
+    struct Run
     {
-    public:
         int indexStart;
         int length;
     };
+
     int GetMinrun(int n);
     void sortInsertionPart(T* arr, int indexFirst, int indexLast);
     void merge(T* arr, int firstIndexStart, int firstLenght, int secondIndexStart, int secondLenght);
-public:
-    MyVector();
-    ~MyVector();
-    void Add(int Position, T Value);
-    void AddFront(T Value);
-    void AddBack(T Value);
-    void Delete(int Position);
-    void DeleteFront();
-    void DeleteBack();
-    void Print();
-    int GetSizeVector();
-    int GetSizeMemory();
-    void SortTimsort();
-    void BubbleSort();
-    //void BubbleSortForEdgeVertexName(); //----
-    void RandomMix();
-    void RandomFill(int NewSizeVector);
-    bool IsSort();
-    void ClearVector();
-    T GetBack();
-    T GetFront();
 
-    T& operator[] (const int index);
+public:
+    TVector();
+    ~TVector();
+
+    void Add(int position, T value); //
+    void AddFront(T value); //
+    void AddBack(T value); //
+    void Delete(int position); //
+    void DeleteFront(); //
+    void DeleteBack(); // 
+    void Print() const; //
+    std::string ToString() const;
+    const int& GetSizeVector() const; //
+    const int& GetSizeMemory() const; //
+
+    void SortTimsort(); //
+    void BubbleSort(); //
+    void RandomMix(); //
+    bool IsSort() const; //
+    void ClearVector(); //
+    const T& GetBack() const;
+    const T& GetFront() const;
+    const T& operator[] (const int index);
 };
 
-//-----------------------------------------------------------------------------------------------------
 
 template<class T>
-inline T& MyVector<T>::operator[](const int index)
+const T& TVector<T>::operator[](const int index)
 {
-    return m_arr[index];
+    return _Arr[index];
 }
+
 
 template <class T>
-inline MyVector<T>::MyVector()
+TVector<T>::TVector() : _SizeMemory(1), _SizeVector(0)
 {
-    m_arr = new T[1];
-    m_sizeVector = 0;
-    m_sizeMemory = 1;
+    _Arr = new T[_SizeMemory];
 }
 
-template<class T>
-inline MyVector<T>::~MyVector()
-{
-    delete[] m_arr;
-}
 
 template<class T>
-inline void MyVector<T>::Add(int Position, T Value)
+TVector<T>::~TVector()
 {
-    if (Position < 0 || Position > m_sizeVector)
-    {
-        cout << "\nErorr in MyVector::Add()";
-        exit(666);
+    delete[] _Arr;
+}
+
+
+template<class T>
+void TVector<T>::Add(int position, T value)
+{
+    if (position < 0 || position > _SizeVector) {
+        throw exception("Position outside the vector size range!");
     }
 
-    if (m_sizeMemory == m_sizeVector)
-    {
-        m_sizeMemory *= 2;
-        T* newArr = new T[m_sizeMemory];
+    if (_SizeMemory == _SizeVector) {
+        _SizeMemory *= _MagFactor;
+        T* newArr = new T[_SizeMemory];
 
-        for (int i = 0; i < m_sizeVector; i++)
-            newArr[i] = m_arr[i];
-        delete[] m_arr;
-        m_arr = newArr;
+        for (int i = 0; i < _SizeVector; i++) {
+            newArr[i] = _Arr[i];
+        }
+        delete[] _Arr;
+        _Arr = newArr;
     }
 
-    m_sizeVector++;
-    for (int i = m_sizeVector - 1; i > Position; i--)
-        m_arr[i] = m_arr[i - 1];
-    m_arr[Position] = Value;
+    _SizeVector++;
+    for (int i = _SizeVector - 1; i > position; i--) {
+        _Arr[i] = _Arr[i - 1];
+    }
+    _Arr[position] = value;
 }
 
 template<class T>
-inline void MyVector<T>::Print()
+void TVector<T>::Print() const
 {
     if (m_sizeVector == 0)
     {
@@ -104,75 +104,75 @@ inline void MyVector<T>::Print()
         return;
     }
     cout << "[ ";
-    for (int i = 0; i < m_sizeVector; i++)
+    for (int i = 0; i < m_sizeVector; i++) {
         cout << m_arr[i] << " ";
-    cout << " ]";
-
+    }
+    cout << "]";
 }
 
 template<class T>
-inline void MyVector<T>::AddFront(T Value)
+void TVector<T>::AddFront(T value)
 {
-    this->Add(0, Value);
+    Add(0, value);
 }
 
 template<class T>
-inline void MyVector<T>::AddBack(T Value)
+void TVector<T>::AddBack(T value)
 {
-    this->Add(m_sizeVector, Value);
+    Add(_SizeVector, value);
 }
 
 template<class T>
-inline void MyVector<T>::Delete(int Position)
+void TVector<T>::Delete(int position)
 {
-    if (Position < 0 || Position >= m_sizeVector)
-    {
-        cout << "\nErorr in MyVector::Delete()";
-        exit(666);
+    if (position < 0 || position >= _SizeVector) {
+        throw exception("Position outside the vector size range!");
     }
 
-    if (m_sizeMemory == m_sizeVector * 4)
+    _SizeVector--;
+    if (_SizeMemory > 2 * _SizeVector * _MagFactor)
     {
-        m_sizeMemory /= 2;
-        T* newArr = new T[m_sizeMemory];
+        _SizeMemory /= _MagFactor;
+        T* newArr = new T[_SizeMemory];
 
-        for (int i = 0; i < m_sizeVector; i++)
-            newArr[i] = m_arr[i];
-        delete[] m_arr;
-        m_arr = newArr;
+        for (int i = 0; i < _SizeVector; i++) {
+            newArr[i] = _Arr[i];
+        }
+        delete[] _Arr;
+        _Arr = newArr;
     }
 
-    m_sizeVector--;
-    for (int i = Position; i < m_sizeVector; i++)
-        m_arr[i] = m_arr[i + 1];
+    for (int i = position; i < _SizeVector; i++) {
+        _Arr[i] = _Arr[i + 1];
+    }
 }
 
 template<class T>
-inline void MyVector<T>::DeleteFront()
+void TVector<T>::DeleteFront()
 {
-    this->Delete(0);
+    Delete(0);
 }
 
 template<class T>
-inline void MyVector<T>::DeleteBack()
+void TVector<T>::DeleteBack()
 {
-    this->Delete(m_sizeVector - 1);
+    Delete(_SizeVector - 1);
 }
 
 template<class T>
-inline int MyVector<T>::GetSizeVector()
+const int& TVector<T>::GetSizeVector() const
 {
-    return m_sizeVector;
+    return _SizeVector;
 }
 
 template<class T>
-inline int MyVector<T>::GetSizeMemory()
+const int& TVector<T>::GetSizeMemory() const
 {
-    return m_sizeMemory;
+    return _SizeMemory;
 }
 
 template<class T>
-inline int MyVector<T>::GetMinrun(int n)
+int TVector<T>::GetMinrun(int n)
 {
     int r = 0;
     while (n >= 64) {
@@ -183,14 +183,13 @@ inline int MyVector<T>::GetMinrun(int n)
 }
 
 template<class T>
-inline void MyVector<T>::sortInsertionPart(T* arr, int indexFirst, int indexLast)
+void TVector<T>::sortInsertionPart(T* arr, int indexFirst, int indexLast)
 {
     for (int i = indexFirst + 1; i < indexLast; ++i)
     {
         T current = arr[i];
         int j = i - 1;
-        while ((j >= indexFirst) && (current > arr[j])) //
-        {
+        while ((j >= indexFirst) && (current > arr[j])) { // ToDo sawap()
             T num = arr[j];
             arr[j] = arr[j + 1];
             arr[j + 1] = num;
@@ -200,43 +199,37 @@ inline void MyVector<T>::sortInsertionPart(T* arr, int indexFirst, int indexLast
 }
 
 template<class T>
-inline void MyVector<T>::merge(T* arr, int firstIndexStart, int firstLenght, int secondIndexStart, int secondLenght)
+void TVector<T>::merge(T* arr, int firstIndexStart, int firstLenght, int secondIndexStart, int secondLenght)
 {
     T* temporary = new T[firstLenght];
 
-    for (int i = 0; i < firstLenght; i++)
+    for (int i = 0; i < firstLenght; i++) {
         temporary[i] = arr[firstIndexStart + i];
+    }
 
     int firstIndexMerge = 0;
     int secondIndexMerge = secondIndexStart;
     int arrIndex = firstIndexStart;
 
-    while (arrIndex < secondIndexStart + secondLenght - 1)
-    {
-        if (arr[secondIndexMerge] > temporary[firstIndexMerge])
-        {
+    while (arrIndex < secondIndexStart + secondLenght - 1) {
+        if (arr[secondIndexMerge] > temporary[firstIndexMerge]) {
             arr[arrIndex] = temporary[firstIndexMerge];
             firstIndexMerge++;
         }
-        //else if (arr[secondIndexMerge] <= temporary[firstIndexMerge]) 
-        else
-        {
+        else {
             arr[arrIndex] = arr[secondIndexMerge];
             secondIndexMerge++;
-
         }
 
-        if (secondIndexMerge == secondIndexStart + secondLenght)
-        {
-            if (firstIndexMerge != firstLenght)
-            {
-                for (int i = firstIndexMerge; i < firstLenght; i++)
+        if (secondIndexMerge == secondIndexStart + secondLenght) {
+            if (firstIndexMerge != firstLenght) {
+                for (int i = firstIndexMerge; i < firstLenght; i++) {
                     arr[i - firstIndexMerge + arrIndex + 1] = temporary[i];
+                }
                 arrIndex = secondIndexStart + secondLenght;
             }
         }
-        if (firstIndexMerge == firstLenght)
-        {
+        if (firstIndexMerge == firstLenght) {
             arrIndex = secondIndexStart + secondLenght;
         }
         arrIndex++;
@@ -245,42 +238,39 @@ inline void MyVector<T>::merge(T* arr, int firstIndexStart, int firstLenght, int
 }
 
 template<class T>
-inline void MyVector<T>::SortTimsort()
-{
-    int minrun = GetMinrun(m_sizeVector);//
-    Queue <Run> queueRun;
-    //queueRun.reserve(m_sizeVector / minrun);//
+void TVector<T>::SortTimsort() {
+    int minrun = GetMinrun(_SizeVector);
+    TVector<Run> queueRun; // ToDo
 
     int indexStart = 0;
-
-    while (indexStart < m_sizeVector - 1)//
-    {
+    while (indexStart < _SizeVector - 1) {
         int indexFirst = indexStart;
         int indexLast = indexFirst + 1;
 
         bool nextStep = true;
         while (nextStep)
         {
-            if (m_arr[indexFirst] > m_arr[indexLast])
+            if (_Arr[indexFirst] > _Arr[indexLast]) {
                 nextStep = false;
-            if (indexLast - indexStart < minrun)
+            }
+            if (indexLast - indexStart < minrun) {
                 nextStep = true;
-            if (indexLast == m_sizeVector - 1)//
+            }
+            if (indexLast == _SizeVector - 1) {
                 nextStep = false;
+            }
 
-            if (nextStep)
-            {
+            if (nextStep) {
                 indexFirst++;
                 indexLast++;
             }
         }
 
-        if (indexLast == m_sizeVector - 2)//
-        {
+        if (indexLast == _SizeVector - 2) {
             indexLast++;
         }
 
-        sortInsertionPart(m_arr, indexStart, indexLast + 1);
+        sortInsertionPart(_Arr, indexStart, indexLast + 1);
 
         Run newRun;
         newRun.indexStart = indexStart;
@@ -289,8 +279,7 @@ inline void MyVector<T>::SortTimsort()
 
         indexStart = indexLast;
 
-        while (queueRun.GetSizeVector() >= 3)
-        {
+        while (queueRun.GetSizeVector() >= 3) {
             Run x = queueRun.GetBack();
             queueRun.DeleteBack();
             Run y = queueRun.GetBack();
@@ -298,130 +287,121 @@ inline void MyVector<T>::SortTimsort()
             Run z = queueRun.GetBack();
             queueRun.DeleteBack();
 
-            if (z.length >= x.length + y.length && y.length >= x.length)
-            {
+            if (z.length >= x.length + y.length && y.length >= x.length) {
                 queueRun.AddBack(z);
                 queueRun.AddBack(y);
                 queueRun.AddBack(x);
                 break;
             }
-            else if (z.length >= x.length + y.length)
-            {
-                if (x.indexStart < y.indexStart)
-                {
+            else if (z.length >= x.length + y.length) {
+                if (x.indexStart < y.indexStart) {
                     swap(x.indexStart, y.indexStart);
                     swap(x.length, y.length);
                 }
-                merge(m_arr, y.indexStart, y.length, x.indexStart, x.length);
+                merge(_Arr, y.indexStart, y.length, x.indexStart, x.length);
                 queueRun.AddBack(z);
                 y.length = y.length + x.length;
                 queueRun.AddBack(y);
             }
-            else
-            {
-                if (y.indexStart < z.indexStart)
-                {
+            else {
+                if (y.indexStart < z.indexStart) {
                     swap(y.indexStart, z.indexStart);
                     swap(y.length, z.length);
                 }
-                merge(m_arr, z.indexStart, z.length, y.indexStart, y.length);
+                merge(_Arr, z.indexStart, z.length, y.indexStart, y.length);
                 z.length = z.length + y.length;
                 queueRun.AddBack(z);
                 queueRun.AddBack(x);
             }
         }
-
     }
 
-    while (queueRun.GetSizeVector() > 1)
-    {
+    while (queueRun.GetSizeVector() > 1) {
         Run x = queueRun.GetFront();
         queueRun.DeleteFront();
         Run y = queueRun.GetFront();
         queueRun.DeleteFront();
-        if (x.indexStart > y.indexStart)
-        {
+        if (x.indexStart > y.indexStart) {
             swap(x.indexStart, y.indexStart);
             swap(x.length, y.length);
         }
-        if (y.indexStart != x.indexStart + x.length)
-        {
+        if (y.indexStart != x.indexStart + x.length) {
             queueRun.AddBack(y);
             queueRun.AddBack(x);
             continue;
         }
-        merge(m_arr, x.indexStart, x.length, y.indexStart, y.length);
+        merge(_Arr, x.indexStart, x.length, y.indexStart, y.length);
         x.length = x.length + y.length;
         queueRun.AddBack(x);
     }
 }
 
 template<class T>
-inline void MyVector<T>::BubbleSort()
+void TVector<T>::BubbleSort()
 {
-    for (int i = 0; i < m_sizeVector - 1; i++) {
-        for (int j = 0; j < m_sizeVector - i - 1; j++) {
-            if (m_arr[j] < m_arr[j + 1]) {
-                T temp = m_arr[j];
-                m_arr[j] = m_arr[j + 1];
-                m_arr[j + 1] = temp;
+    for (int i = 0; i < _SizeVector - 1; i++) {
+        for (int j = 0; j < _SizeVector - i - 1; j++) {
+            if (_Arr[j] < _Arr[j + 1]) {
+                T temp = _Arr[j];
+                _Arr[j] = _Arr[j + 1];
+                _Arr[j + 1] = temp;
             }
         }
     }
 }
 
 template<class T>
-inline void MyVector<T>::RandomMix()
+void TVector<T>::RandomMix()
 {
-    for (int i = 0; i < (m_sizeVector + 1) / 2; i++)
-        swap(m_arr[i], m_arr[(rand() % m_sizeVector)]);
+    for (int i = 0; i < _SizeVector; i++) {
+        swap(_Arr[i], _Arr[rand() % _SizeVector]);
+    }
 }
 
 template<class T>
-inline void MyVector<T>::RandomFill(int NewSizeVector)
+void TVector<T>::ClearVector()
 {
-    ClearVector();
-    m_sizeVector = NewSizeVector;
-    while (m_sizeMemory < m_sizeVector)
-        m_sizeMemory *= 2;
-    m_arr = new T[m_sizeMemory];
-    for (int i = 0; i < m_sizeVector; i++)
-        m_arr[i] = rand() % 1000;
-
-
-    //for (int)
+    _SizeMemory = 1;
+    _SizeVector = 0;
+    delete[] _Arr;
+    _Arr = new T[1];
 }
 
 template<class T>
-inline void MyVector<T>::ClearVector()
+bool TVector<T>::IsSort() const
 {
-    m_sizeMemory = 1;
-    m_sizeVector = 0;
-    delete[] m_arr;
-    m_arr = new T[1];
+    for (int i = 0; i < _SizeVector - 1; i++) {
+        if (_Arr[i] > _Arr[i + 1]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 template<class T>
-inline bool MyVector<T>::IsSort()
+const T& TVector<T>::GetBack() const
 {
-    bool mistake = false;
-    for (int i = 0; i < m_sizeVector - 1; i++)
-        if (m_arr[i] > m_arr[i + 1])
-            mistake = true;
-    return !mistake;
-}
-
-
-template<class T>
-inline T MyVector<T>::GetBack()
-{
-    return m_arr[m_sizeVector - 1];
+    return _Arr[_SizeVector - 1];
 }
 
 template<class T>
-inline T MyVector<T>::GetFront()
+const T& TVector<T>::GetFront() const
 {
-    return m_arr[0];
+    return _Arr[0];
 }
 
-//_________-__________________________________________________________________________________\\
+template<class T>
+std::string TVector<T>::ToString() const {
+    std::string ans;
+
+    if (_SizeVector == 0)
+    {
+        return "[ Empty vector ]";
+    }
+    ans = "[ ";
+    for (int i = 0; i < _SizeVector; i++) {
+        ans += to_string(_Arr[i]) + " ";
+    }
+    ans += "]";
+    return ans;
+}
