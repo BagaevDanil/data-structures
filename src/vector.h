@@ -3,6 +3,70 @@
 
 using namespace std;
 
+namespace {
+    int GetMinrun(int n)
+    {
+        int r = 0;
+        while (n >= 64) {
+            r |= n & 1;
+            n >>= 1;
+        }
+        return n + r;
+    }
+
+    template<class T>
+    void SortInsertionPart(T* arr, int indexFirst, int indexLast)
+    {
+        for (int i = indexFirst + 1; i < indexLast; ++i) {
+            T current = arr[i];
+            int j = i - 1;
+            while ((j >= indexFirst) && (current > arr[j])) {
+                swap(arr[j], arr[j + 1]);
+                --j;
+            }
+        }
+    }
+
+    template<class T>
+    void Merge(T* arr, int firstIndexStart, int firstLenght, int secondIndexStart, int secondLenght)
+    {
+        T* temporary = new T[firstLenght];
+
+        for (int i = 0; i < firstLenght; i++) {
+            temporary[i] = arr[firstIndexStart + i];
+        }
+
+        int firstIndexMerge = 0;
+        int secondIndexMerge = secondIndexStart;
+        int arrIndex = firstIndexStart;
+
+        while (arrIndex < secondIndexStart + secondLenght - 1) {
+            if (arr[secondIndexMerge] > temporary[firstIndexMerge]) {
+                arr[arrIndex] = temporary[firstIndexMerge];
+                firstIndexMerge++;
+            }
+            else {
+                arr[arrIndex] = arr[secondIndexMerge];
+                secondIndexMerge++;
+            }
+
+            if (secondIndexMerge == secondIndexStart + secondLenght) {
+                if (firstIndexMerge != firstLenght) {
+                    for (int i = firstIndexMerge; i < firstLenght; i++) {
+                        arr[i - firstIndexMerge + arrIndex + 1] = temporary[i];
+                    }
+                    arrIndex = secondIndexStart + secondLenght;
+                }
+            }
+            if (firstIndexMerge == firstLenght) {
+                arrIndex = secondIndexStart + secondLenght;
+            }
+            arrIndex++;
+        }
+        delete[] temporary;
+    }
+}
+
 template <class T>
 class TVector
 {
@@ -18,10 +82,6 @@ private:
         int indexStart;
         int length;
     };
-
-    int GetMinrun(int n);
-    void sortInsertionPart(T* arr, int indexFirst, int indexLast);
-    void merge(T* arr, int firstIndexStart, int firstLenght, int secondIndexStart, int secondLenght);
 
 public:
     TVector();
@@ -46,12 +106,12 @@ public:
     void ClearVector(); 
     const T& GetBack() const;
     const T& GetFront() const;
-    const T& operator[] (const int index);
+    T& operator[] (const int index);
 };
 
 
 template<class T>
-const T& TVector<T>::operator[](const int index)
+T& TVector<T>::operator[](const int index)
 {
     return _Arr[index];
 }
@@ -173,70 +233,6 @@ const int& TVector<T>::GetSizeMemory() const
 }
 
 template<class T>
-int TVector<T>::GetMinrun(int n)
-{
-    int r = 0;
-    while (n >= 64) {
-        r |= n & 1;
-        n >>= 1;
-    }
-    return n + r;
-}
-
-template<class T>
-void TVector<T>::sortInsertionPart(T* arr, int indexFirst, int indexLast)
-{
-    for (int i = indexFirst + 1; i < indexLast; ++i)
-    {
-        T current = arr[i];
-        int j = i - 1;
-        while ((j >= indexFirst) && (current > arr[j])) {
-            swap(arr[j], arr[j + 1]);
-            --j;
-        }
-    }
-}
-
-template<class T>
-void TVector<T>::merge(T* arr, int firstIndexStart, int firstLenght, int secondIndexStart, int secondLenght)
-{
-    T* temporary = new T[firstLenght];
-
-    for (int i = 0; i < firstLenght; i++) {
-        temporary[i] = arr[firstIndexStart + i];
-    }
-
-    int firstIndexMerge = 0;
-    int secondIndexMerge = secondIndexStart;
-    int arrIndex = firstIndexStart;
-
-    while (arrIndex < secondIndexStart + secondLenght - 1) {
-        if (arr[secondIndexMerge] > temporary[firstIndexMerge]) {
-            arr[arrIndex] = temporary[firstIndexMerge];
-            firstIndexMerge++;
-        }
-        else {
-            arr[arrIndex] = arr[secondIndexMerge];
-            secondIndexMerge++;
-        }
-
-        if (secondIndexMerge == secondIndexStart + secondLenght) {
-            if (firstIndexMerge != firstLenght) {
-                for (int i = firstIndexMerge; i < firstLenght; i++) {
-                    arr[i - firstIndexMerge + arrIndex + 1] = temporary[i];
-                }
-                arrIndex = secondIndexStart + secondLenght;
-            }
-        }
-        if (firstIndexMerge == firstLenght) {
-            arrIndex = secondIndexStart + secondLenght;
-        }
-        arrIndex++;
-    }
-    delete[] temporary;
-}
-
-template<class T>
 void TVector<T>::SortTimsort() {
     int minrun = GetMinrun(_SizeVector);
     TQueue<Run> queueRun;
@@ -269,7 +265,7 @@ void TVector<T>::SortTimsort() {
             indexLast++;
         }
 
-        sortInsertionPart(_Arr, indexStart, indexLast + 1);
+        SortInsertionPart(_Arr, indexStart, indexLast + 1);
 
         Run newRun;
         newRun.indexStart = indexStart;
@@ -297,7 +293,7 @@ void TVector<T>::SortTimsort() {
                     swap(x.indexStart, y.indexStart);
                     swap(x.length, y.length);
                 }
-                merge(_Arr, y.indexStart, y.length, x.indexStart, x.length);
+                Merge(_Arr, y.indexStart, y.length, x.indexStart, x.length);
                 queueRun.PushBack(z);
                 y.length = y.length + x.length;
                 queueRun.PushBack(y);
@@ -307,7 +303,7 @@ void TVector<T>::SortTimsort() {
                     swap(y.indexStart, z.indexStart);
                     swap(y.length, z.length);
                 }
-                merge(_Arr, z.indexStart, z.length, y.indexStart, y.length);
+                Merge(_Arr, z.indexStart, z.length, y.indexStart, y.length);
                 z.length = z.length + y.length;
                 queueRun.PushBack(z);
                 queueRun.PushBack(x);
@@ -329,7 +325,7 @@ void TVector<T>::SortTimsort() {
             queueRun.PushBack(x);
             continue;
         }
-        merge(_Arr, x.indexStart, x.length, y.indexStart, y.length);
+        Merge(_Arr, x.indexStart, x.length, y.indexStart, y.length);
         x.length = x.length + y.length;
         queueRun.PushBack(x);
     }

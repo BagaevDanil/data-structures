@@ -38,3 +38,12 @@ string TVertex::ToString() const {
 	return ans;
 }
 
+const string& TVertex::Name() const
+{
+	return _Name;
+}
+
+TVertex*& TVertex::Parent()
+{
+	return _Parent;
+}
