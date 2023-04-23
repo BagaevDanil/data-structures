@@ -37,7 +37,7 @@ add_executable(
 	# src/edge.h
 	src/vector.h
 	src/queue.h
-	# src/treeAVL.h
+	src/treeAVL.h
 	# src/vertex.h
 )
 target_link_libraries(
