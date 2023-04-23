@@ -17,5 +17,7 @@ public:
 	friend ostream& operator<<(ostream& os, const TVertex& vertex);
 
 	string ToString() const;
+	const string& Name() const;
+	TVertex*& TVertex::Parent();
 };
 
