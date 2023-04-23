@@ -18,4 +18,7 @@ public:
 	void operator=(const TEdge& other);
 
 	std::string ToString() const;
+	TVertex* FirstVertex();
+	TVertex* SecondVertex();
+	const int& Weight();
 };

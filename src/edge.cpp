@@ -38,3 +38,18 @@ std::string TEdge::ToString() const
 {
 	return _FirstVertex->ToString() + "<->" + _SecondVertex->ToString();
 }
+
+TVertex* TEdge::FirstVertex()
+{
+	return _FirstVertex;
+}
+
+TVertex* TEdge::SecondVertex()
+{
+	return _SecondVertex;
+}
+
+const int& TEdge::Weight() 
+{
+	return _Weight;
+}
