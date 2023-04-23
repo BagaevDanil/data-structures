@@ -107,8 +107,21 @@ public:
     const T& GetBack() const;
     const T& GetFront() const;
     T& operator[] (const int index);
+    void operator=(const TVector& other);
 };
 
+template<class T>
+void TVector<T>::operator=(const TVector& other)
+{
+    delte[] _Arr;
+    _SizeMemory = other._SizeMemory;
+    _SizeVector = other._SizeVector;
+
+    _Arr = new T[_SizeMemory];
+    for (int i = 0; i < _SizeVector; i++) {
+        _Arr[i] = other._Arr[i];
+    }
+}
 
 template<class T>
 T& TVector<T>::operator[](const int index)

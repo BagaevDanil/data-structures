@@ -25,23 +25,23 @@ private:
 	int _Size = 0;
 
 private:
-	unsigned int GetHeight(Node<ValT, KeyT>* unit);
-	int GetBalanceFactor(Node<ValT, KeyT>* node);
+	unsigned int GetHeight(Node<ValT, KeyT>* unit)  const;
+	int GetBalanceFactor(Node<ValT, KeyT>* node) const;
 	void FixHeight(Node<ValT, KeyT>* node);
 	Node<ValT, KeyT>* RotateRight(Node<ValT, KeyT>* node);
 	Node<ValT, KeyT>* RotateLeft(Node<ValT, KeyT>* node);
 	Node<ValT, KeyT>* Balance(Node<ValT, KeyT>* node);
 	Node<ValT, KeyT>* InsertPrivate(Node<ValT, KeyT>* unit, KeyT key, ValT value);
-	void PrintTreePrivate(Node<ValT, KeyT>* unit);
-	Node<ValT, KeyT>* PrintPrivate(Node<ValT, KeyT>* unit);
+	void PrintTreePrivate(Node<ValT, KeyT>* unit) const;
+	Node<ValT, KeyT>* PrintPrivate(Node<ValT, KeyT>* unit) const;
 
-	Node<ValT, KeyT>* FindMin(Node<ValT, KeyT>* node);
+	Node<ValT, KeyT>* FindMin(Node<ValT, KeyT>* node) const;
 	Node<ValT, KeyT>* RemoveMin(Node<ValT, KeyT>* node);
 	Node<ValT, KeyT>* RemovePrivate(Node<ValT, KeyT>* node, KeyT key);
 
-	ValT* GetPrivate(Node<ValT, KeyT>* node, KeyT key);
-	int GetkeySerialNumberPrivate(Node<ValT, KeyT>* node, KeyT key);
-	KeyT GetkeyPrivate(Node<ValT, KeyT>* node, int Key);
+	ValT* GetPrivate(Node<ValT, KeyT>* node, KeyT key) const;
+	int GetkeySerialNumberPrivate(Node<ValT, KeyT>* node, KeyT key) const;
+	KeyT GetkeyPrivate(Node<ValT, KeyT>* node, int Key) const;
 
 	int AssignKeysPrivate(Node<ValT, KeyT>* unit, int keyMeaning);
 
@@ -51,27 +51,27 @@ public:
 	TTreeAVL();
 	void Insert(KeyT key, ValT value);
 	void Remove(KeyT key);
-	void PrintTree();
-	void Print();
+	void PrintTree() const;
+	void Print() const;
 	
-	ValT* Get(KeyT k);
-	const ValT& GetValue(KeyT k);
-	int GetkeySerialNumber(KeyT key);
-	KeyT GetKey(int key);
-	bool Contains(KeyT key);
+	ValT* Get(KeyT k) const;
+	const ValT& GetValue(KeyT k) const;
+	int GetkeySerialNumber(KeyT key) const;
+	const KeyT& GetKey(int key) const;
+	bool Contains(KeyT key) const;
 
-	int GetHeightTree();
-	const int& GetSize();
+	int GetHeightTree() const;
+	const int& GetSize() const;
 };
 
 template <class ValT, class KeyT>
-const int& TTreeAVL<ValT, KeyT>::GetSize()
+const int& TTreeAVL<ValT, KeyT>::GetSize() const
 {
 	return _Size;
 }
 
 template <class ValT, class KeyT>
-int TTreeAVL<ValT, KeyT>::GetHeightTree() 
+int TTreeAVL<ValT, KeyT>::GetHeightTree() const
 {
 	if (!_Head) {
 		return 0;
@@ -90,13 +90,13 @@ template <class ValT, class KeyT>
 TTreeAVL<ValT, KeyT>::TTreeAVL() : _Head(nullptr) {}
 
 template <class ValT, class KeyT>
-unsigned int TTreeAVL<ValT, KeyT>::GetHeight(Node<ValT, KeyT>* unit)
+unsigned int TTreeAVL<ValT, KeyT>::GetHeight(Node<ValT, KeyT>* unit) const
 {
 	return unit ? unit->Height : 0;
 }
 
 template <class ValT, class KeyT>
-int TTreeAVL<ValT, KeyT>::GetBalanceFactor(Node<ValT, KeyT>* unit)
+int TTreeAVL<ValT, KeyT>::GetBalanceFactor(Node<ValT, KeyT>* unit) const
 {
 	return GetHeight(unit->Right) - GetHeight(unit->Left);
 }
@@ -183,7 +183,7 @@ void TTreeAVL<ValT, KeyT>::Insert(KeyT key, ValT value)
 }
 
 template <class ValT, class KeyT>
-void TTreeAVL<ValT, KeyT>::PrintTreePrivate(Node<ValT, KeyT>* unit)
+void TTreeAVL<ValT, KeyT>::PrintTreePrivate(Node<ValT, KeyT>* unit) const
 {
 	if (!unit)
 		return;
@@ -203,14 +203,14 @@ void TTreeAVL<ValT, KeyT>::PrintTreePrivate(Node<ValT, KeyT>* unit)
 }
 
 template <class ValT, class KeyT>
-void TTreeAVL<ValT, KeyT>::PrintTree()
+void TTreeAVL<ValT, KeyT>::PrintTree() const
 {
 	Node<ValT, KeyT>* demo = _Head;
 	PrintTreePrivate(demo);
 }
 
-template <class ValT, class KeyT>
-TTreeAVL<ValT, KeyT>::Node<ValT, KeyT>* TTreeAVL<ValT, KeyT>::FindMin(Node<ValT, KeyT>* unit)
+template <class ValT, class KeyT> 
+TTreeAVL<ValT, KeyT>::Node<ValT, KeyT>* TTreeAVL<ValT, KeyT>::FindMin(Node<ValT, KeyT>* unit) const
 {
 	return unit->Left ? FindMin(unit->Left) : unit;
 }
@@ -263,14 +263,14 @@ void TTreeAVL<ValT, KeyT>::Remove(KeyT key)
 }
 
 template <class ValT, class KeyT>
-void TTreeAVL<ValT, KeyT>::Print()
+void TTreeAVL<ValT, KeyT>::Print() const
 {
 	Node<ValT, KeyT>* demo = _Head;
 	PrintPrivate(demo);
 }
 
 template <class ValT, class KeyT>
-TTreeAVL<ValT, KeyT>::Node<ValT, KeyT>* TTreeAVL<ValT, KeyT>::PrintPrivate(Node<ValT, KeyT>* unit)
+TTreeAVL<ValT, KeyT>::Node<ValT, KeyT>* TTreeAVL<ValT, KeyT>::PrintPrivate(Node<ValT, KeyT>* unit) const
 {
 	if (unit == 0) {
 		return unit;
@@ -284,7 +284,7 @@ TTreeAVL<ValT, KeyT>::Node<ValT, KeyT>* TTreeAVL<ValT, KeyT>::PrintPrivate(Node<
 }
 
 template <class ValT, class KeyT>
-ValT* TTreeAVL<ValT, KeyT>::GetPrivate(Node<ValT, KeyT>* unit, KeyT key)
+ValT* TTreeAVL<ValT, KeyT>::GetPrivate(Node<ValT, KeyT>* unit, KeyT key) const
 {
 	if (!unit) {
 		return nullptr;
@@ -301,14 +301,14 @@ ValT* TTreeAVL<ValT, KeyT>::GetPrivate(Node<ValT, KeyT>* unit, KeyT key)
 }
 
 template <class ValT, class KeyT>
-ValT* TTreeAVL<ValT, KeyT>::Get(KeyT key)
+ValT* TTreeAVL<ValT, KeyT>::Get(KeyT key) const
 {
 	Node<ValT, KeyT>* demo = _Head;
 	return GetPrivate(demo, key);
 }
 
 template <class ValT, class KeyT>
-bool TTreeAVL<ValT, KeyT>::Contains(KeyT key)
+bool TTreeAVL<ValT, KeyT>::Contains(KeyT key) const
 {
 	Node<ValT, KeyT>* demo = _Head;
 	ValT* ans = GetPrivate(demo, key);
@@ -319,7 +319,7 @@ bool TTreeAVL<ValT, KeyT>::Contains(KeyT key)
 }
 
 template <class ValT, class KeyT>
-const ValT& TTreeAVL<ValT, KeyT>::GetValue(KeyT key)
+const ValT& TTreeAVL<ValT, KeyT>::GetValue(KeyT key) const
 {
 	Node<ValT, KeyT>* demo = _Head;
 	ValT* ans = GetPrivate(demo, key);
@@ -347,7 +347,7 @@ int TTreeAVL<ValT, KeyT>::AssignKeysPrivate(Node<ValT, KeyT>* unit, int key)
 }
 
 template <class ValT, class KeyT>
-int TTreeAVL<ValT, KeyT>::GetkeySerialNumberPrivate(Node<ValT, KeyT>* unit, KeyT key)
+int TTreeAVL<ValT, KeyT>::GetkeySerialNumberPrivate(Node<ValT, KeyT>* unit, KeyT key) const
 {
 	if (!unit) {
 		throw exception("A node with such a key was not found!");
@@ -364,14 +364,14 @@ int TTreeAVL<ValT, KeyT>::GetkeySerialNumberPrivate(Node<ValT, KeyT>* unit, KeyT
 }
 
 template <class ValT, class KeyT>
-int TTreeAVL<ValT, KeyT>::GetkeySerialNumber(KeyT key)
+int TTreeAVL<ValT, KeyT>::GetkeySerialNumber(KeyT key) const
 {
 	Node<ValT, KeyT>* demo = _Head;
 	return GetkeySerialNumberPrivate(demo, key);
 }
 
 template<class ValT, class KeyT>
-KeyT TTreeAVL<ValT, KeyT>::GetkeyPrivate(Node<ValT, KeyT>* unit, int key)
+KeyT TTreeAVL<ValT, KeyT>::GetkeyPrivate(Node<ValT, KeyT>* unit, int key) const
 {
 	if (!unit) {
 		throw exception("A node with such a key was not found!");
@@ -388,7 +388,7 @@ KeyT TTreeAVL<ValT, KeyT>::GetkeyPrivate(Node<ValT, KeyT>* unit, int key)
 }
 
 template<class ValT, class KeyT>
-KeyT TTreeAVL<ValT, KeyT>::GetKey(int key)
+const KeyT& TTreeAVL<ValT, KeyT>::GetKey(int key) const
 {
 	Node<ValT, KeyT>* demo = _Head;
 	return GetkeyPrivate(demo, key);
