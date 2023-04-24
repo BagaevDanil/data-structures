@@ -87,6 +87,7 @@ public:
     TVector();
     ~TVector();
 
+    TVector(const TVector& other);
     void Add(int position, T value); 
     void AddFront(T value); 
     void AddBack(T value); 
@@ -104,16 +105,27 @@ public:
     void RandomMix(); 
     bool IsSort() const;
     void ClearVector(); 
-    const T& GetBack() const;
-    const T& GetFront() const;
+    T& GetBack();
+    T& GetFront();
     T& operator[] (const int index);
     void operator=(const TVector& other);
 };
 
 template<class T>
+TVector<T>::TVector(const TVector& other) {
+    _SizeMemory = other._SizeMemory;
+    _SizeVector = other._SizeVector;
+
+    _Arr = new T[_SizeMemory];
+    for (int i = 0; i < _SizeVector; i++) {
+        _Arr[i] = other._Arr[i];
+    }
+}
+
+template<class T>
 void TVector<T>::operator=(const TVector& other)
 {
-    delte[] _Arr;
+    delete[] _Arr;
     _SizeMemory = other._SizeMemory;
     _SizeVector = other._SizeVector;
 
@@ -387,13 +399,13 @@ bool TVector<T>::IsSort() const
 }
 
 template<class T>
-const T& TVector<T>::GetBack() const
+T& TVector<T>::GetBack()
 {
     return _Arr[_SizeVector - 1];
 }
 
 template<class T>
-const T& TVector<T>::GetFront() const
+T& TVector<T>::GetFront()
 {
     return _Arr[0];
 }

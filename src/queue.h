@@ -14,8 +14,8 @@ public:
 	void PopFront();
 	bool IsEmpty() const;
 	const int& Size() const;
-	const T& Front() const;
-	const T& Back() const;
+	const T& Front();
+	const T& Back();
 };
 
 template <class T>
@@ -55,13 +55,13 @@ const int& TQueue<T>::Size() const
 }
 
 template <class T>
-const T& TQueue<T>::Back() const
+const T& TQueue<T>::Back()
 {
 	return TVector<T>::GetBack();
 }
 
 template <class T>
-const T& TQueue<T>::Front() const
+const T& TQueue<T>::Front()
 {
 	return TVector<T>::GetFront();
 }

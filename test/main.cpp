@@ -1,8 +1,13 @@
+#pragma once
 #include <iostream>
 #include <gtest/gtest.h>
 #include "../src/vector.h"
 #include "../src/queue.h"
 #include "../src/treeAVL.h"
+#include "../src/kruskal.cpp"
+
+#include "../src/vertex.h"
+#include "../src/edge.h"
 
 using namespace std;
 

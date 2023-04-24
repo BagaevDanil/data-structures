@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿#pragma once
+#include <iostream>
 #include "treeAVL.h"
 #include "queue.h"
 #include "vertex.h"
@@ -44,15 +45,15 @@ namespace MyAlgorithms {
         T midEdge = ArrEdge[(left + right) / 2];
         do {
             while (
-                (ArrEdge[left].FirstVertex()->Name() < midEdge.FirstVertex()->Name()) ||
-                (ArrEdge[left].FirstVertex()->Name() == midEdge.FirstVertex()->Name() && ArrEdge[left].SecondVertex()->Name() < midEdge.SecondVertex()->Name())
+                (ArrEdge[left].FirstVertex().Name() < midEdge.FirstVertex().Name()) ||
+                (ArrEdge[left].FirstVertex().Name() == midEdge.FirstVertex().Name() && ArrEdge[left].SecondVertex().Name() < midEdge.SecondVertex().Name())
                 ) {
                 left++;
             }
 
             while (
-                (ArrEdge[right].FirstVertex()->Name() > midEdge.FirstVertex()->Name()) ||
-                (ArrEdge[right].FirstVertex()->Name() == midEdge.FirstVertex()->Name() && ArrEdge[right].SecondVertex()->Name() > midEdge.SecondVertex()->Name())
+                (ArrEdge[right].FirstVertex().Name() > midEdge.FirstVertex().Name()) ||
+                (ArrEdge[right].FirstVertex().Name() == midEdge.FirstVertex().Name() && ArrEdge[right].SecondVertex().Name() > midEdge.SecondVertex().Name())
                 ) {
                 right--;
             }
@@ -84,8 +85,8 @@ namespace MyAlgorithms {
         while (QueueEdge.GetSizeVector() > 0)
         {
             TEdge defaultEdge = QueueEdge.GetBack();
-            TVertex* x = findMainParent(defaultEdge.FirstVertex());
-            TVertex* y = findMainParent(defaultEdge.SecondVertex());
+            TVertex* x = findMainParent(&defaultEdge.FirstVertex());
+            TVertex* y = findMainParent(&defaultEdge.SecondVertex());
             if (x != y) {
                 x->Parent() = y;
                 AnswerEdge.AddBack(defaultEdge);
@@ -103,57 +104,21 @@ namespace MyAlgorithms {
         for (int i = 0; i < ArrEdge.GetSizeVector(); i++)
         {
             TEdge newEdge = ArrEdge[i];
-            std::cout << newEdge.FirstVertex()->Name() << " " << newEdge.SecondVertex()->Name() << " " << newEdge.Weight() << endl;
+            std::cout << newEdge.FirstVertex().Name() << " " << newEdge.SecondVertex().Name() << " " << newEdge.Weight() << endl;
             allWeight += newEdge.Weight();
         }
         std::cout << "\nWeight: " << allWeight;
     }
 
-    void printAdjacencyMatrix(TTreeAVL<TVertex, string>& arrVertex, int n, TVector<TEdge>& ArrEdge)
-    {
-        arrVertex.AssignKeys();
-
-        int inf = -1;
-
-        int adjacencyMatrixArr[50][50];
-        for (int i = 0; i < 50; i++)
-            for (int j = 0; j < 50; j++)
-                adjacencyMatrixArr[i][j] = inf;
-
-        for (int i = 0; i < ArrEdge.GetSizeVector(); i++)
-        {
-            TEdge newEdge = ArrEdge[i];
-            int firstIndex = arrVertex.GetkeySerialNumber(newEdge.FirstVertex()->Name());
-            int secondIndex = arrVertex.GetkeySerialNumber(newEdge.SecondVertex()->Name());
-            adjacencyMatrixArr[firstIndex][secondIndex] = adjacencyMatrixArr[secondIndex][firstIndex] = newEdge.Weight();
-        }
-
-        cout << "\t";
-        for (int i = 0; i < n; i++)
-            cout << arrVertex.GetKey(i) << "\t";
-        cout << endl;
-
-        for (int i = 0; i < n; i++)
-        {
-            cout << arrVertex.GetKey(i) << "\t";
-            for (int j = 0; j < n; j++)
-            {
-                adjacencyMatrixArr[i][j] == -1 ? cout << ".\t" : cout << adjacencyMatrixArr[i][j] << "\t";
-            }
-            cout << endl;
-        }
-    }
-
-    TVector<TEdge>* kruskal(TVector<TEdge>& inputEdges)
+    TVector<TEdge> kruskal(TVector<TEdge> arrEdges)
     {
         TTreeAVL<TVertex, string> arrVertex;
-        TVector<TEdge> queueEdge;
-        int nVertex = 0, nEdges = inputEdges.GetSizeVector();
+        int nVertex = 0, nEdges = arrEdges.GetSizeVector();
 
         for (int i = 0; i < nEdges; i++) {
-            string keyVertexFirst = inputEdges[i].FirstVertex()->Name();
-            string keyVertexSecond = inputEdges[i].SecondVertex()->Name();
-            int weight = inputEdges[i].Weight();
+            string keyVertexFirst = arrEdges[i].FirstVertex().Name();
+            string keyVertexSecond = arrEdges[i].SecondVertex().Name();
+            int weight = arrEdges[i].Weight();
 
             if (!arrVertex.Contains(keyVertexFirst)) {
                 arrVertex.Insert(keyVertexFirst, TVertex(keyVertexFirst));
@@ -163,19 +128,16 @@ namespace MyAlgorithms {
                 arrVertex.Insert(keyVertexSecond, TVertex(keyVertexSecond));
                 nVertex++;
             }
-
-            TVertex* fisrt = arrVertex.Get(keyVertexFirst);
-            TVertex* second = arrVertex.Get(keyVertexSecond);
-            queueEdge.AddBack(TEdge(fisrt, second, weight));
         }
 
-        queueEdge.SortTimsort();
-        TVector<TEdge>* AnswerEdge = new TVector<TEdge>();
-        mergeEdges(queueEdge, *AnswerEdge);
+        arrEdges.SortTimsort();
+        TVector<TEdge> AnswerEdge;
+        mergeEdges(arrEdges, AnswerEdge);
         return AnswerEdge;
     }
 }
 
+/*
 int main()
 {
     TVector<TEdge> arr;
@@ -188,16 +150,16 @@ int main()
         int weight;
 
         cin >> keyVertexFirst >> keyVertexSecond >> weight;
-        arr.AddBack(TEdge(new TVertex(keyVertexFirst), new TVertex(keyVertexSecond), weight));
+        arr.AddBack(TEdge(TVertex(keyVertexFirst), TVertex(keyVertexSecond), weight));
     }
 
-    auto* ans = MyAlgorithms::kruskal(arr);
-    MyAlgorithms::printEdges(*ans);
+    auto ans = MyAlgorithms::kruskal(arr);
+    cout << ans.ToString() << endl;
 
     return 0;
 } 
 
-/*
+
     6
     1 2 4
     2 3 9

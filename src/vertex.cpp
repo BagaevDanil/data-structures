@@ -1,12 +1,13 @@
+#pragma once
 #include "vertex.h"
 
-TVertex::TVertex(string name) : _Name(name), _Parent(nullptr) /*_Amount(1)*/ {}
+TVertex::TVertex(string name) : _Name(name), _Parent(nullptr) {}
 
-TVertex::TVertex() : _Name(""), _Parent(nullptr) /*_Amount(1)*/ {}
+TVertex::TVertex() : _Name(""), _Parent(nullptr) {}
 
 void TVertex::operator=(const TVertex& other)
 {
-	_Parent = other._Parent;
+	// _Parent = other._Parent;
 	_Name = other._Name;
 }
 
@@ -25,17 +26,9 @@ ostream& operator<<(ostream& os, const TVertex& vertex)
 	return os;
 }
 
-string TVertex::ToString() const {
-	string ans = _Name;
-
-	if (!_Parent) {
-		ans += "|0";
-	}
-	else {
-		ans += _Parent->_Name;
-	}
-
-	return ans;
+string TVertex::ToString() const 
+{
+	return _Name;
 }
 
 const string& TVertex::Name() const

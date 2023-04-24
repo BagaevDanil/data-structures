@@ -34,11 +34,14 @@ add_executable(
 add_executable(
 	Test 
 	test/main.cpp
-	# src/edge.h
+	src/kruskal.cpp
+	src/edge.h
+	src/edge.cpp
 	src/vector.h
 	src/queue.h
 	src/treeAVL.h
-	# src/vertex.h
+	src/vertex.h
+	src/vertex.cpp
 )
 target_link_libraries(
   Test

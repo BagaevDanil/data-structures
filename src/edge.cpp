@@ -1,10 +1,10 @@
+#pragma once
 #include "edge.h"
 
 
-TEdge::TEdge() : _FirstVertex(nullptr), _SecondVertex(nullptr), _Weight(-1) {}
+TEdge::TEdge(TVertex first, TVertex second, int weight) : _FirstVertex(first), _SecondVertex(second), _Weight(weight) {}
 
-
-TEdge::TEdge(TVertex* first, TVertex* second, int weight) : _FirstVertex(first), _SecondVertex(second), _Weight(weight) {}
+TEdge::TEdge() : _Weight(0) {}
 
 
 bool TEdge::operator>(const TEdge& other)
@@ -21,7 +21,7 @@ bool TEdge::operator<(const TEdge& other)
 
 ostream& operator<<(ostream& os, const TEdge& edge)
 {
-	os << *(edge._FirstVertex) << "_-_" << *(edge._SecondVertex) << endl;
+	os << edge._FirstVertex << "_-_" << edge._SecondVertex << endl;
 	return os;
 }
 
@@ -36,20 +36,25 @@ void TEdge::operator=(const TEdge& other)
 
 std::string TEdge::ToString() const
 {
-	return _FirstVertex->ToString() + "<->" + _SecondVertex->ToString();
+	return "{" + _FirstVertex.ToString() + "," + _SecondVertex.ToString() + "=" + to_string(_Weight) + "}";
 }
 
-TVertex* TEdge::FirstVertex()
+TVertex& TEdge::FirstVertex()
 {
 	return _FirstVertex;
 }
 
-TVertex* TEdge::SecondVertex()
+TVertex& TEdge::SecondVertex()
 {
 	return _SecondVertex;
 }
 
-const int& TEdge::Weight() 
+const int& TEdge::Weight() const
 {
 	return _Weight;
+}
+
+std::string to_string(TEdge edge) 
+{
+	return edge.ToString();
 }
