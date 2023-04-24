@@ -4,12 +4,34 @@
 #include "../src/vector.h"
 #include "../src/queue.h"
 #include "../src/treeAVL.h"
-#include "../src/kruskal.cpp"
-
+#include "../src/kruskal.h"
 #include "../src/vertex.h"
 #include "../src/edge.h"
 
 using namespace std;
+
+TEST(Kruskal, test) {
+    TVector<TEdge> arr;
+    int nEdges = 6;
+    string keyVertexFirstArr[] = { "1", "2", "3", "4", "1", "3" };
+    string keyVertexSecondArr[] = { "2", "3", "5", "1", "5", "4" };
+    int weightArr[] = { 4, 9, 3, 7, 1, 2 };
+    int ans = 26;
+
+    for (int i = 0; i < nEdges; i++) {
+        string keyVertexFirst = keyVertexFirstArr[i], keyVertexSecond = keyVertexSecondArr[i];
+        int weight = weightArr[i];
+
+        arr.AddBack(TEdge(TVertex(keyVertexFirst), TVertex(keyVertexSecond), weight));
+    }
+    auto ansEdge = MyAlgorithms::kruskal(arr);
+    int prediction = 0;
+    for (int i = 0; i < nEdges; i++) {
+        prediction += ansEdge[i].Weight();
+    }
+
+    ASSERT_EQ(prediction, ans);
+}
 
 TEST(TreeAVL, Insert1) {
     TTreeAVL<int, int> tree;

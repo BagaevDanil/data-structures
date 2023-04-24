@@ -20,8 +20,10 @@ enable_testing()
 # Main
 add_executable(
 	Main 
+	src/main.cpp
 	src/edge.h
 	src/edge.cpp
+	src/kruskal.h
 	src/kruskal.cpp
 	src/vector.h
 	src/queue.h
@@ -34,6 +36,7 @@ add_executable(
 add_executable(
 	Test 
 	test/main.cpp
+	src/kruskal.h
 	src/kruskal.cpp
 	src/edge.h
 	src/edge.cpp

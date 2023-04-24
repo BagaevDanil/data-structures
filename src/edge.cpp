@@ -1,30 +1,24 @@
-#pragma once
 #include "edge.h"
-
 
 TEdge::TEdge(TVertex first, TVertex second, int weight) : _FirstVertex(first), _SecondVertex(second), _Weight(weight) {}
 
 TEdge::TEdge() : _Weight(0) {}
 
-
-bool TEdge::operator>(const TEdge& other)
+bool TEdge::operator>(const TEdge& other) const
 {
 	return _Weight > other._Weight;
 }
 
-
-bool TEdge::operator<(const TEdge& other)
+bool TEdge::operator<(const TEdge& other) const
 {
 	return _Weight < other._Weight;
 }
 
-
 ostream& operator<<(ostream& os, const TEdge& edge)
 {
-	os << edge._FirstVertex << "_-_" << edge._SecondVertex << endl;
+	os << "{" << edge._FirstVertex.ToString() << "," << edge._SecondVertex.ToString() << "=" << edge._Weight << "}";
 	return os;
 }
-
 
 void TEdge::operator=(const TEdge& other)
 {
@@ -32,7 +26,6 @@ void TEdge::operator=(const TEdge& other)
 	_SecondVertex = other._SecondVertex;
 	_Weight = other._Weight;
 }
-
 
 std::string TEdge::ToString() const
 {
@@ -54,7 +47,7 @@ const int& TEdge::Weight() const
 	return _Weight;
 }
 
-std::string to_string(TEdge edge) 
+std::string to_string(const TEdge& edge)
 {
 	return edge.ToString();
 }
