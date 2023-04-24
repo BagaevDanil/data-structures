@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include <iostream>
-#include "treeAVL.h"
-#include "queue.h"
+#include "treeAVL.hpp"
+#include "queue.hpp"
 #include "vertex.h"
-#include "vector.h"
+#include "vector.hpp"
 #include "edge.h"
 
 using namespace std;

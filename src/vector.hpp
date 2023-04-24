@@ -3,6 +3,50 @@
 
 using namespace std;
 
+template <class T>
+class TVector
+{
+
+private:
+    T* _Arr;
+    int _SizeVector;
+    int _SizeMemory;
+    int _MagFactor = 2;
+
+    struct Run
+    {
+        int indexStart;
+        int length;
+    };
+
+public:
+    TVector();
+    ~TVector();
+
+    TVector(const TVector& other);
+    void Add(int position, T value);
+    void AddFront(T value);
+    void AddBack(T value);
+    void Delete(int position);
+    void DeleteFront();
+    void DeleteBack();
+    void Print() const;
+    std::string ToString() const;
+    const int& GetSizeVector() const;
+    const int& GetSizeMemory() const;
+    bool IsEmpty() const;
+
+    void SortTimsort();
+    void BubbleSort();
+    void RandomMix();
+    bool IsSort() const;
+    void ClearVector();
+    T& GetBack();
+    T& GetFront();
+    T& operator[] (int index);
+    void operator=(const TVector& other);
+};
+
 namespace {
     int GetMinrun(int n)
     {
@@ -67,50 +111,6 @@ namespace {
     }
 }
 
-template <class T>
-class TVector
-{
-
-private:
-    T* _Arr;
-    int _SizeVector;
-    int _SizeMemory;
-    int _MagFactor = 2;
-
-    struct Run
-    {
-        int indexStart;
-        int length;
-    };
-
-public:
-    TVector();
-    ~TVector();
-
-    TVector(const TVector& other);
-    void Add(int position, T value); 
-    void AddFront(T value); 
-    void AddBack(T value); 
-    void Delete(int position); 
-    void DeleteFront();
-    void DeleteBack();  
-    void Print() const; 
-    std::string ToString() const;
-    const int& GetSizeVector() const; 
-    const int& GetSizeMemory() const; 
-    bool IsEmpty() const;
-
-    void SortTimsort(); 
-    void BubbleSort();
-    void RandomMix(); 
-    bool IsSort() const;
-    void ClearVector(); 
-    T& GetBack();
-    T& GetFront();
-    T& operator[] (const int index);
-    void operator=(const TVector& other);
-};
-
 template<class T>
 TVector<T>::TVector(const TVector& other) {
     _SizeMemory = other._SizeMemory;
@@ -136,7 +136,7 @@ void TVector<T>::operator=(const TVector& other)
 }
 
 template<class T>
-T& TVector<T>::operator[](const int index)
+T& TVector<T>::operator[](int index)
 {
     return _Arr[index];
 }
@@ -216,8 +216,7 @@ void TVector<T>::Delete(int position)
     }
 
     _SizeVector--;
-    if (_SizeMemory > 2 * _SizeVector * _MagFactor)
-    {
+    if (_SizeMemory > 2 * _SizeVector * _MagFactor) {
         _SizeMemory /= _MagFactor;
         T* newArr = new T[_SizeMemory];
 

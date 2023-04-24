@@ -1,9 +1,9 @@
 #pragma once
 #include <iostream>
 #include <gtest/gtest.h>
-#include "../src/vector.h"
-#include "../src/queue.h"
-#include "../src/treeAVL.h"
+#include "../src/vector.hpp"
+#include "../src/queue.hpp"
+#include "../src/treeAVL.hpp"
 #include "../src/kruskal.h"
 #include "../src/vertex.h"
 #include "../src/edge.h"

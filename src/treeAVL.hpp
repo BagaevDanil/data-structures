@@ -32,7 +32,6 @@ private:
 	Node<ValT, KeyT>* RotateLeft(Node<ValT, KeyT>* node);
 	Node<ValT, KeyT>* Balance(Node<ValT, KeyT>* node);
 	Node<ValT, KeyT>* InsertPrivate(Node<ValT, KeyT>* unit, KeyT key, ValT value);
-	void PrintTreePrivate(Node<ValT, KeyT>* unit) const;
 	Node<ValT, KeyT>* PrintPrivate(Node<ValT, KeyT>* unit) const;
 
 	Node<ValT, KeyT>* FindMin(Node<ValT, KeyT>* node) const;
@@ -46,11 +45,11 @@ private:
 	int AssignKeysPrivate(Node<ValT, KeyT>* unit, int keyMeaning);
 
 public:
-	void AssignKeys();
 	TTreeAVL(KeyT key, ValT value);
 	TTreeAVL();
 	void Insert(KeyT key, ValT value);
 	void Remove(KeyT key);
+	void AssignKeys();
 	void PrintTree() const;
 	void Print() const;
 	
@@ -76,7 +75,6 @@ int TTreeAVL<ValT, KeyT>::GetHeightTree() const
 	if (!_Head) {
 		return 0;
 	}
-
 	return max(GetHeight(_Head->Right), GetHeight(_Head->Left));
 }
 
@@ -113,9 +111,9 @@ template <class ValT, class KeyT>
 TTreeAVL<ValT, KeyT>::Node<ValT, KeyT>* TTreeAVL<ValT, KeyT>::RotateRight(Node<ValT, KeyT>* unit)
 {
 	Node<ValT, KeyT>* UnitLeftChild = unit->Left;
-
 	unit->Left = UnitLeftChild->Right;
 	UnitLeftChild->Right = unit;
+
 	FixHeight(unit);
 	FixHeight(UnitLeftChild);
 	return(UnitLeftChild);
@@ -125,9 +123,9 @@ template <class ValT, class KeyT>
 TTreeAVL<ValT, KeyT>::Node<ValT, KeyT>* TTreeAVL<ValT, KeyT>::RotateLeft(Node<ValT, KeyT>* unit)
 {
 	Node<ValT, KeyT>* UnitRightChild = unit->Right;
-
 	unit->Right = UnitRightChild->Left;
 	UnitRightChild->Left = unit;
+
 	FixHeight(unit);
 	FixHeight(UnitRightChild);
 	return(UnitRightChild);
@@ -139,15 +137,15 @@ TTreeAVL<ValT, KeyT>::Node<ValT, KeyT>* TTreeAVL<ValT, KeyT>::Balance(Node<ValT,
 	FixHeight(unit);
 	int BalanceFactor = GetBalanceFactor(unit);
 
-	if (BalanceFactor == 2) { //RotateLeft
-		if (GetBalanceFactor(unit->Right) < 0) { //BigRotateLeft
+	if (BalanceFactor == 2) { // RotateLeft
+		if (GetBalanceFactor(unit->Right) < 0) { // BigRotateLeft
 			unit->Right = RotateRight(unit->Right);
 		}
 			
 		unit = RotateLeft(unit);
 	}
-	else if (BalanceFactor == -2) { //RotateRight
-		if (GetBalanceFactor(unit->Left) > 0) { //BigRotateRight
+	else if (BalanceFactor == -2) { // RotateRight
+		if (GetBalanceFactor(unit->Left) > 0) { // BigRotateRight
 			unit->Left = RotateLeft(unit->Left);
 		}
 		unit = RotateRight(unit);
@@ -180,33 +178,6 @@ void TTreeAVL<ValT, KeyT>::Insert(KeyT key, ValT value)
 {
 	_Head = TTreeAVL<ValT, KeyT>::InsertPrivate(_Head, key, value);
 	_Size++;
-}
-
-template <class ValT, class KeyT>
-void TTreeAVL<ValT, KeyT>::PrintTreePrivate(Node<ValT, KeyT>* unit) const
-{
-	if (!unit)
-		return;
-	cout << "\n\n\n[" << unit->Key << "," << unit->KeySerialNumber << "]" << unit->Value;
-	cout << "\n|\t\\\n";
-	if (!unit->Left)
-		cout << "[null]";
-	else
-		cout << "[" << unit->Left->Key << "," << unit->Left->KeySerialNumber << "]" << unit->Left->Value;
-	if (!unit->Right)
-		cout << "\t[null]";
-	else
-		cout << "\t[" << unit->Right->Key << "," << unit->Right->KeySerialNumber << "]" << unit->Right->Value;
-
-	PrintTreePrivate(unit->Right);
-	PrintTreePrivate(unit->Left);
-}
-
-template <class ValT, class KeyT>
-void TTreeAVL<ValT, KeyT>::PrintTree() const
-{
-	Node<ValT, KeyT>* demo = _Head;
-	PrintTreePrivate(demo);
 }
 
 template <class ValT, class KeyT> 

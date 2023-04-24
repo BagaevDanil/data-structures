@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "vector.h"
+#include "vector.hpp"
 
 using namespace std;
 

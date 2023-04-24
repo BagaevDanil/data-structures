@@ -21,30 +21,39 @@ enable_testing()
 add_executable(
 	Main 
 	src/main.cpp
+
 	src/edge.h
 	src/edge.cpp
+
 	src/kruskal.h
 	src/kruskal.cpp
-	src/vector.h
-	src/queue.h
-	src/treeAVL.h
+
 	src/vertex.h
 	src/vertex.cpp
+
+	src/vector.hpp
+	src/queue.hpp
+	src/treeAVL.hpp
 )
 
 # Test
 add_executable(
 	Test 
 	test/main.cpp
+
 	src/kruskal.h
 	src/kruskal.cpp
+
 	src/edge.h
 	src/edge.cpp
-	src/vector.h
-	src/queue.h
-	src/treeAVL.h
+
 	src/vertex.h
 	src/vertex.cpp
+
+	src/vector.hpp
+	src/queue.hpp
+	src/treeAVL.hpp
+	
 )
 target_link_libraries(
   Test

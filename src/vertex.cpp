@@ -7,7 +7,7 @@ TVertex::TVertex() : _Name(""), _Parent(nullptr) {}
 
 void TVertex::operator=(const TVertex& other)
 {
-	// _Parent = other._Parent;
+	_Parent = other._Parent;
 	_Name = other._Name;
 }
 
@@ -19,10 +19,8 @@ ostream& operator<<(ostream& os, const TVertex& vertex)
 		os << "0";
 		return os;
 	}
-	else {
-		os << vertex._Parent->_Name;
-	}
-
+	
+	os << vertex._Parent->_Name;
 	return os;
 }
 
